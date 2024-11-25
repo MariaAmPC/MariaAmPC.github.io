@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#262626">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', { scope: '/' });
+        }
+    </script>
+    <style>
+        .background-dark {
+            background-color: #262626;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+        }
+
+        .margin-top {
+            margin-top: 50px;
+        }
+
+        .timer {
+            font-size: 60px;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .button {
+            font-size: 100%;
+            border-radius: 12px;
+            background-color: #D8D4F2;
+            padding: 12px 28px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .spruch {
+            color: white;
+            font-size: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 50px 0 0;
+        }
+
+        .pinguin,
+        .dino {
+            height: 50px;
+        }
+        .weather{
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            align-content:center;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+        }
+    </style>
+</head>
+
+<body class="background-dark">
+
+    <div class="image-container">
+        <img class="dino" src="dino.png" id="dino">
+        <img class="pinguin" src="pinguin.png" id="pinguin">
+    </div>
+
+    <div class="center timer margin-top" id="timer">00:00:00:00</div>
+
+    <div class="center margin-top">
+        <button class="button" onclick="yogi()">Yogi-Tee<br>Spruch des Tages</button>
+    </div>
+    <div class="center spruch margin-top" id="text"></div>
+    <div class="weather">
+        <div id="weathererl"></div>
+        <div id="weathersa"></div>
+    </div>
+    <script>
+        const zielDatum = new Date("December 19, 2024 17:00:00").getTime();
+        anz = 0;
+        const timer = setInterval(() => {
+            const jetzt = new Date().getTime();
+            const verbleibendeZeit = zielDatum - jetzt;
+
+            const stunden = Math.floor(verbleibendeZeit / (1000 * 60 * 60)).toString().padStart(2, '0');
+            const minuten = Math.floor((verbleibendeZeit % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            const sekunden = Math.floor((verbleibendeZeit % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            const millisekunden = Math.floor(verbleibendeZeit % 1000 / 10).toString().padStart(2, '0');
+            document.getElementById("timer").innerHTML = `${stunden}:${minuten}:${sekunden}:${millisekunden}`;
+
+            if (verbleibendeZeit <= 0) {
+                clearInterval(timer);
+                document.getElementById("timer").innerHTML = "00:00:00:00";
+            }
+        }, 1);
+
+        // Funktion für Sprüche des Tages
+        function yogi() {
+            const sprueche = {
+                1: "Sei dir bewusst, welche Macht ein einmal gesprochenes Wort hat.",
+                2: "Mit dem Herzen siehst du mehr als mit dem Auge.",
+                3: "Nutze deinen Kopf, um aus dem Herzen zu leben.",
+                4: "Wer zuhört, versteht.",
+                5: "Mach dir keine Sorgen über morgen – nur im Heute kannst du etwas ändern.",
+                6: "Lebe leicht und reise mit leichtem Gepäck.",
+                7: "Jede Erfahrung lehrt dich etwas; deine Reaktion zeigt, ob du verstanden hast.",
+                8: "Sich selbst zu kennen ist Weisheit, sich selbst zu meistern ist wahre Größe.",
+                9: "Arbeite, aber vergiss dabei nicht zu leben.",
+                10: "Sei zu gleichen Teilen nach innen wie nach außen gerichtet.",
+                11: "Wenn du möchtest, dass man sich an dich erinnert, hinterlasse nichts als Liebe.",
+                12: "Vertraue auf den Weg, auch wenn du das Ziel nicht erkennst.",
+                13: "Dein Glück beginnt, wo deine Ängste enden.",
+                14: "Dankbarkeit ist der Schlüssel zur Fülle.",
+                15: "Verliere dich nicht in dem, was andere von dir erwarten.",
+                16: "Die beste Zeit, einen Baum zu pflanzen, war vor 20 Jahren; die zweitbeste ist jetzt.",
+                17: "Liebe heilt alles, wenn du sie wirklich zulässt.",
+                18: "Lebe im Moment, denn das Jetzt ist alles, was zählt.",
+                19: "Ein Lächeln kostet nichts, schenkt aber unendlich viel.",
+                20: "In der Stille findest du die Antworten, die das Lärmen der Welt verbirgt.",
+                21: "Gib, ohne etwas zurückzuerwarten – das ist wahre Großzügigkeit.",
+                22: "Deine Gedanken formen deine Welt; wähle sie weise.",
+                23: "Die dunkelsten Nächte bringen die hellsten Sterne hervor.",
+                24: "Selbst die längste Reise beginnt mit dem ersten Schritt.",
+                25: "Hör nie auf, zu träumen, aber verliere dich nicht in deinen Träumen.",
+                26: "Alles, was du brauchst, trägst du bereits in dir.",
+                27: "Um klar zu sehen, genügt oft ein Wechsel der Perspektive.",
+                28: "Nur wer loslässt, hat die Hände frei für Neues.",
+                29: "Aus jedem Ende wächst ein neuer Anfang.",
+                30: "Der wahre Reichtum liegt in der Tiefe deines Herzens.",
+                31: "Wer Liebe sät, wird Frieden ernten."
+            };
+            const heute = new Date().getDate();
+            const rheute = new Date();
+            const ziel = new Date("December 19, 2024")
+            const feld = document.getElementById("text");
+            const verbleibendeTage = Math.ceil((ziel - rheute) / (1000 * 60 * 60 * 24));
+            if (anz == 0) {
+                feld.innerHTML = `${sprueche[heute] || "Spruch nicht verfügbar"}<br><br>Nur noch ${verbleibendeTage} Tage`;
+                anz = 1;
+            } else {
+                feld.innerHTML = "Ich Liebe Dich!";
+                anz = 0;
+            }
+        }
+        const startDatum = new Date("November 25, 2024");
+        const endDatum = new Date("December 19, 2024");
+        function bewegeBilder() {
+            const heute = new Date();
+            const vergangeneTage = Math.floor((heute - startDatum) / (1000 * 60 * 60 * 24));
+            const gesamtTage = Math.floor((endDatum - startDatum) / (1000 * 60 * 60 * 24));
+            const bewegungProzent = Math.min(50, vergangeneTage * 1.6);
+
+            document.getElementById("dino").style.marginLeft = bewegungProzent + "%";
+            document.getElementById("pinguin").style.marginRight = bewegungProzent + "%";
+        }
+
+        bewegeBilder();
+
+        const apiKey = "b2698399b4af572dd5d2794dd39ce144";
+        const erl = document.getElementById("weathererl");
+        const sa = document.getElementById("weathersa");
+        async function getWeather() {
+            try {
+                const city = "Erlangen";
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=de&appid=${apiKey}`;
+                // Daten abrufen
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Wetterdaten konnten nicht geladen werden.");
+                const data = await response.json();
+                // Wetter anzeigen
+                const sunsetTimestamp = data.sys.sunset; // Beispiel: 1732548193
+        const sunsetDate = new Date(sunsetTimestamp * 1000);
+        const sunsetTime = sunsetDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        
+                erl.innerHTML = `
+            <p style="font-size:25px">${data.name} ${data.main.temp}°C</p>
+            <p style="font-size:25px"></p>
+            <p>${data.weather[0].description}</p>
+        `;
+            } catch (error) {
+                weatherDiv.innerHTML = `<p>${error.message}</p>`;
+            }
+            try {
+                const city = "Sarajevo";
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=de&appid=${apiKey}`;
+                // Daten abrufen
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Wetterdaten konnten nicht geladen werden.");
+                const data = await response.json();
+                // Wetter anzeigen
+                const sunsetTimestamp = data.sys.sunset; 
+                const sunsetDate = new Date(sunsetTimestamp * 1000);
+                const sunsetTime = sunsetDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        
+                sa.innerHTML = `
+            <p style="font-size:25px">${data.name} ${data.main.temp}°C</p>
+            <p style="font-size:25px"></p>
+            <p>${data.weather[0].description}</p>
+        `;
+            } catch (error) {
+                weatherDiv.innerHTML = `<p>${error.message}</p>`;
+            }
+        }
+        getWeather();
+
+
+
+    </script>
+</body>
+
+</html>
